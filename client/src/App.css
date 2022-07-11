@@ -7,6 +7,10 @@
   color: #000;
 }
 
+.register:hover{
+  cursor: pointer;
+}
+
 @media screen and (max-width: 875px) {
   .phoneImg {
     display: none;
