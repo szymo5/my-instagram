@@ -1,0 +1,14 @@
+.phoneImg{
+  display: block;
+}
+
+.link{
+  text-decoration: none;
+  color: #000;
+}
+
+@media screen and (max-width: 875px) {
+  .phoneImg {
+    display: none;
+  }
+}
