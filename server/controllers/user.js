@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 // import crypto from 'cryptojs';
-const crypto = import("crypto");
+// const crypto = import("crypto");
+import crypto from "crypto"
 import {sendEmail} from '../utils/sendEmail.js';
 
 import User from '../models/user.js';
@@ -9,6 +10,7 @@ import Token from '../models/token.js';
 
 export const signup = async (req, res) => {
     const {email, username, password, confirmPassword} = req.body;
+    console.log(req.body)
 
     try {
         const existingUser = await User.findOne({email});
@@ -26,7 +28,7 @@ export const signup = async (req, res) => {
             token: crypto.randomBytes(32).toString("hex"),
           }).save();
       
-        const message = `${process.env.BASE_URL}/user/${result._id}/verify/${token.token}`;
+        const message = `Open this link to verify your MyInstagram account: ${process.env.BASE_URL}/user/${result._id}/verify/${token.token}`;
         await sendEmail(result.email, "Verify Email", message);
 
     } catch (error) {
