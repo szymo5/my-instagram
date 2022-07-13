@@ -15,9 +15,9 @@ export const signup = async (req, res) => {
     try {
         const existingUser = await User.findOne({email});
 
-        if(existingUser) return res.status(404).json({message: "User already exists"});
+        if(existingUser) return res.status(404).json({error: "User already exists", message: false});
 
-        if(password !== confirmPassword) return res.status(400).json({message: "Passwords don't match."});
+        if(password !== confirmPassword) return res.status(400).json({error: "Passwords don't match.", message: false});
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -30,6 +30,7 @@ export const signup = async (req, res) => {
       
         const message = `Open this link to verify your MyInstagram account: ${process.env.BASE_URL}/user/${result._id}/verify/${token.token}`;
         await sendEmail(result.email, "Verify Email", message);
+        return res.status(201).json({error: false, message: "Account created"});
 
     } catch (error) {
         console.log(error);   
