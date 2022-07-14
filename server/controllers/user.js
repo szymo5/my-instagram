@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-// import crypto from 'cryptojs';
-// const crypto = import("crypto");
+import validator from 'validator'
 import crypto from "crypto"
 import {sendEmail} from '../utils/sendEmail.js';
 
@@ -13,11 +12,17 @@ export const signup = async (req, res) => {
     console.log(req.body)
 
     try {
+        const isEmail = validator.isEmail(email);
+        const pass = password.length > 4 ? true : false;
+
+        if(!isEmail) return res.status(404).json({errorMsg: "Invalid Email", type: "email"});
+        if (!pass) return res.status(404).json({errorMsg: "Password is too short", type: "password"});
+
+        if(password !== confirmPassword) return res.status(400).json({errorMsg: "Passwords don't match.", type: "password"});
+
         const existingUser = await User.findOne({email});
+        if(existingUser) return res.status(404).json({errorMsg: "User already exist.", type: "email"});
 
-        if(existingUser) return res.status(404).json({error: "User already exists", message: false});
-
-        if(password !== confirmPassword) return res.status(400).json({error: "Passwords don't match.", message: false});
 
         const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -30,7 +35,7 @@ export const signup = async (req, res) => {
       
         const message = `Open this link to verify your MyInstagram account: ${process.env.BASE_URL}/user/${result._id}/verify/${token.token}`;
         await sendEmail(result.email, "Verify Email", message);
-        return res.status(201).json({error: false, message: "Account created"});
+        return res.status(201).json({message: "Account created"});
 
     } catch (error) {
         console.log(error);   

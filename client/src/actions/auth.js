@@ -1,5 +1,5 @@
 import * as api from '../api';
-import { authInfo } from '../redux/auth';
+import { authInfo, authError } from '../redux/auth';
 
 export const signup = (formData) => async (dispatch) => {
     try {
@@ -8,6 +8,8 @@ export const signup = (formData) => async (dispatch) => {
 
         dispatch(authInfo(data))
     } catch (error) {
-        console.log(error);
+        // console.log(error.response.data);
+        dispatch(authError(error.response.data))
+        
     }
 }

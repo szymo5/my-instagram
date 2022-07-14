@@ -10,13 +10,20 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     authInfo: (state, action) => {
-      state.message = action.payload.message
-      state.error = action.payload.error
+      state.message = action.payload
+      state.error = false
     },
+    authError: (state, action) => {
+      state.error = action.payload
+    },
+    clearState: (state, action) => {
+      state.message = false
+      state.error = false
+    }
   },
 })
 
 
-export const {authInfo} = authSlice.actions
+export const {authInfo, authError, clearState} = authSlice.actions
 
 export default authSlice.reducer
