@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   message: false,
-  error: false
+  error: false,
+  isLoading: false
 }
 
 export const authSlice = createSlice({
@@ -19,11 +20,14 @@ export const authSlice = createSlice({
     clearState: (state, action) => {
       state.message = false
       state.error = false
+    },
+    loadingState: (state, action) => {
+      state.isLoading = action.payload
     }
   },
 })
 
 
-export const {authInfo, authError, clearState} = authSlice.actions
+export const {authInfo, authError, clearState, loadingState} = authSlice.actions
 
 export default authSlice.reducer
