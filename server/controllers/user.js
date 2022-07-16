@@ -48,13 +48,13 @@ export const verify = async (req, res) => {
     try {
         const user = await User.findOne({ _id: id });
 
-        if (!user) return res.status(400).json({message: "Invalid link"});
+        if (!user) return res.status(400).json({errorMsg: "Invalid link", type: "verification"});
 
         const token = await Token.findOne({
             userId: user._id,
             token: verifyToken,
         });
-        if (!token) return res.status(400).json({message: "Invalid link"});
+        if (!token) return res.status(400).json({errorMsg: "Invalid link", type: "verification"});
 
         await User.updateOne({ _id: user._id, verified: true });
         await Token.findByIdAndRemove(token._id);
