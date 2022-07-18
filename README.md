@@ -8,7 +8,7 @@ This project was built in React JS, Material UI, NodeJS, ExpressJS, MongoDB. The
 
 ## Frontend
 
-![Tech](https://skills.thijs.gg/icons?i=react,js,html,css,materialui)
+![Tech](https://skills.thijs.gg/icons?i=react,js,redux,html,css,materialui)
 
 ## Backend
 
