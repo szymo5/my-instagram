@@ -23,11 +23,14 @@ export const authSlice = createSlice({
     },
     loadingState: (state, action) => {
       state.isLoading = action.payload
+    },
+    authData: (state, action) => {
+      localStorage.setItem('profile', JSON.stringify(action.payload))
     }
   },
 })
 
 
-export const {authInfo, authError, clearState, loadingState} = authSlice.actions
+export const {authInfo, authError, clearState, loadingState, authData} = authSlice.actions
 
 export default authSlice.reducer

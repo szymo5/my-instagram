@@ -41,7 +41,7 @@ const Auth = () => {
     }
 
     return (
-        <Stack direction="row" spacing={2} alignItems="center" justifyContent="center" mt={10}>
+        <>
             <img src={PhoneImg} alt="phone" className="phoneImg"></img>
             <Stack>
                 {isLoading ? <Loader/> : (
@@ -51,9 +51,9 @@ const Auth = () => {
                     {isSignUp && <Typography color="#8e8e8e" textAlign="center" fontSize="17px" fontWeight="600" mt={2} sx={{lineHeight: '1.2'}}>Zarejestruj się, aby przeglądać zdjęcia i filmy znajomych.</Typography>}
                     <Stack component="form" mt={3} width="100%" spacing={1} onSubmit={handleSubmit}>
                         {isSignUp && <TextField name="username" label="Nazwa użytkownika" variant="outlined" size="small" fullWidth onChange={handleChange}/>}
-                        <TextField name="email" label="Adres email" variant="outlined" size="small" fullWidth sx={{fontSize: '12px'}} error={error.type == 'email' ? true : false} helperText={error.type == 'email' && error.errorMsg} onChange={handleChange}/>
-                        <TextField name="password" type="password" label="Hasło" variant="outlined" size="small" fullWidth error={error.type == 'password' ? true : false} helperText={error.type == 'password' && error.errorMsg} onChange={handleChange}/>
-                        {isSignUp && <TextField name="confirmPassword" type="password" label="Powtórz hasło" variant="outlined" size="small" fullWidth error={error.type == 'password' ? true : false} helperText={error.type == 'password' && error.errorMsg} onChange={handleChange}/>}
+                        <TextField name="email" label="Adres email" variant="outlined" size="small" fullWidth sx={{fontSize: '12px'}} error={error.type === 'email' ? true : false} helperText={error.type === 'email' && error.errorMsg} onChange={handleChange}/>
+                        <TextField name="password" type="password" label="Hasło" variant="outlined" size="small" fullWidth error={error.type === 'password' ? true : false} helperText={error.type === 'password' && error.errorMsg} onChange={handleChange}/>
+                        {isSignUp && <TextField name="confirmPassword" type="password" label="Powtórz hasło" variant="outlined" size="small" fullWidth error={error.type === 'password' ? true : false} helperText={error.type === 'password' && error.errorMsg} onChange={handleChange}/>}
                         <Button type="submit" variant="contained" sx={{marginTop: '20px !important', backgroundColor: '#0095f6', fontWeight: '600', textTransform: 'none'}}>{isSignUp ? 'Zarejestruj się' : 'Zaloguj się'}</Button>
                     </Stack>
                     {(isSignUp && message) && (<Box mt={2} borderRadius="3px" p="6px 12px" sx={{backgroundColor: 'rgb(7,186, 121, 0.8)'}}><Typography fontSize="13px" color="#fff">Wysłano na podany email link weryfikacyjny.</Typography></Box>)}
@@ -90,15 +90,15 @@ const Auth = () => {
                         Pobierz aplikację.
                     </Typography>
                     <Stack direction="row" alignItems="center" justifyContent="center" marginTop="20px" spacing={1}>
-                        <a href="https://apps.apple.com/app/instagram/id389801252?vt=lo" target="_blank"><img src={AppStore} alt="appstore" height="40px"/></a>
-                        <a href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb%26utm_campaign%3DloginPage%26ig_mid%3D5F6253FE-5BDC-45C7-8F3C-7F2B048928B8%26utm_content%3Dlo%26utm_medium%3Dbadge" target="_blank"><img src={GooglePlay} alt="googleplay" height="40px"/></a>
+                        <a href="https://apps.apple.com/app/instagram/id389801252?vt=lo" target="_blank" rel="noreferrer"><img src={AppStore} alt="appstore" height="40px"/></a>
+                        <a href="https://play.google.com/store/apps/details?id=com.instagram.android&referrer=utm_source%3Dinstagramweb%26utm_campaign%3DloginPage%26ig_mid%3D5F6253FE-5BDC-45C7-8F3C-7F2B048928B8%26utm_content%3Dlo%26utm_medium%3Dbadge" target="_blank" rel="noreferrer"><img src={GooglePlay} alt="googleplay" height="40px"/></a>
                     </Stack>
                 </Stack>
                 </>
                 )}
                 
             </Stack>
-        </Stack>
+        </>
     )
 }
 

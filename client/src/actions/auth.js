@@ -1,5 +1,5 @@
 import * as api from '../api';
-import { authInfo, authError, loadingState } from '../redux/auth';
+import { authInfo, authError, loadingState, authData} from '../redux/auth';
 
 export const signup = (formData) => async (dispatch) => {
     try {
@@ -28,5 +28,20 @@ export const verify = (id, token) => async (dispatch) => {
     } catch (error) {
         dispatch(authError(error.response.data))
         dispatch(loadingState(false))
+    }
+}
+
+export const login = (formData) => async (dispatch) => {
+    try {
+        // login user
+        dispatch(loadingState(true));
+
+        const {data} = await api.signIn(formData);
+        dispatch(authData(data));
+
+        dispatch(loadingState(false));
+    } catch (error) {
+        dispatch(loadingState(false))
+        dispatch(authError(error.response.data))
     }
 }

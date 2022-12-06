@@ -42,6 +42,27 @@ export const signup = async (req, res) => {
     }
 }
 
+export const signin = async (req, res) => {
+    const {email, password} = req.body;
+
+    try {
+        const user = await User.findOne({email});
+        if(!user) return res.status(400).json({errorMsg: "Invalid email", type: "email"});
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if(!isPasswordCorrect) return res.status(400).json({errorMsg: "Invalid password", type:"password"});
+
+        if(!user.verified) return res.status(400).json({errorMsg: "User not verified", type:"verified"}); 
+
+        const authToken = jwt.sign({email: user.email, id: user._id}, "test", {expiresIn: "1h"});
+
+        res.status(200).json({user, authToken});
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const verify = async (req, res) => {
     const {id, token: verifyToken} = req.params;
 

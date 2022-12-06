@@ -4,7 +4,7 @@ import {Box} from '@mui/material'
 
 import './App.css';
 
-import Auth from './pages/Auth'
+import Login from './pages/Login'
 import Verification from './pages/Verification'
 
 
@@ -12,7 +12,7 @@ const App = () => {
   return (
       <Box sx={{width: {xl: '1200px'}}} m='auto' p='0'>
           <Routes>
-              <Route path='/' element={<Auth/>}/>
+              <Route path='/' element={<Login/>}/>
               <Route path='/user/:id/verify/:token' element={<Verification/>}/>
               {/* <Route path='/' element={<Verification/>}/> */}
           </Routes>
