@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux';
 
 import {Stack, Typography, Button, TextField, Box, Divider} from '@mui/material'
@@ -12,7 +12,7 @@ import AppStore from '../assets/appstore.png'
 import GooglePlay from '../assets/googleplay.png'
 
 
-import { signup } from '../actions/auth';
+import { signup, signin } from '../actions/auth';
 import { clearState } from '../redux/auth';
 
 const initialState = {email: '', username:'', password:'', confirmPassword: ''};
@@ -24,6 +24,7 @@ const Auth = () => {
     const [formData, setFormData] = useState(initialState);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -32,7 +33,8 @@ const Auth = () => {
         if(isSignUp) {
             dispatch(signup(formData))
         } else {
-            console.log('login')
+            dispatch(signin(formData, navigate))
+            //console.log('login')
         }
     }
 

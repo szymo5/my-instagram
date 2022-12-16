@@ -52,11 +52,33 @@ export const signin = async (req, res) => {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if(!isPasswordCorrect) return res.status(400).json({errorMsg: "Invalid password", type:"password"});
 
-        if(!user.verified) return res.status(400).json({errorMsg: "User not verified", type:"verified"}); 
+        //if(!user.verified) return res.status(400).json({errorMsg: "User not verified", type:"verified"}); 
+        if(!user.verified) {
+            // check if verify token for user exist
+            const isToken = await Token.findOne({userId: user._id});
+            if(isToken) {
+                // if exist delete old token
+                await Token.findOneAndDelete({userId: user._id});
+            }
+
+            // create new verify token and send new verification email
+            let token = await new Token({
+                userId: user._id,
+                token: crypto.randomBytes(32).toString("hex"),
+              }).save();
+          
+            const message = `Open this link to verify your MyInstagram account: ${process.env.BASE_URL}/user/${user._id}/verify/${token.token}`;
+            await sendEmail(result.email, "Verify Email", message);
+            return res.status(200).json({message: "New verify link send to email"});
+        }
+
 
         const authToken = jwt.sign({email: user.email, id: user._id}, "test", {expiresIn: "1h"});
 
-        res.status(200).json({user, authToken});
+        const account = JSON.parse(JSON.stringify(user));
+        delete account.password;
+
+        res.status(200).json({account, authToken});
         
     } catch (error) {
         console.log(error);

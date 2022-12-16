@@ -7,6 +7,7 @@ export const signup = (formData) => async (dispatch) => {
         dispatch(loadingState(true))
 
         const {data} = await api.signUp(formData);
+        console.log(data.message);
 
         dispatch(authInfo(data))
 
@@ -31,15 +32,18 @@ export const verify = (id, token) => async (dispatch) => {
     }
 }
 
-export const login = (formData) => async (dispatch) => {
+export const signin = (formData, navigate, setUser) => async (dispatch) => {
     try {
         // login user
         dispatch(loadingState(true));
 
         const {data} = await api.signIn(formData);
+        //console.log(data);
         dispatch(authData(data));
 
         dispatch(loadingState(false));
+
+        navigate('/home')
     } catch (error) {
         dispatch(loadingState(false))
         dispatch(authError(error.response.data))
