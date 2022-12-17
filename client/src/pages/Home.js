@@ -1,4 +1,4 @@
-const App = () => {
+const Home = () => {
     const user = JSON.parse(localStorage.getItem("profile")).account;
 
     return ( 
@@ -6,4 +6,4 @@ const App = () => {
      );
 }
  
-export default App;
+export default Home;

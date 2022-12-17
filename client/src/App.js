@@ -10,26 +10,27 @@ import Home from './pages/Home'
 
 
 const App = () => {
-    const [user, setUser] = useState(null);
-    
+    const [isUser, setIsUser] = useState(false);
+    const [user, setUser] = useState(null)
+    // useEffect(() => {
+    //     const userCheck = localStorage.getItem('profile');
+    //     setUser(userCheck ? JSON.parse(localStorage.getItem('profile')).account : null);
+    // }, [])
 
     useEffect(() => {
-        function checkUser(){
-            const userCheck = localStorage.getItem('profile');
-            setUser(userCheck ? JSON.parse(localStorage.getItem('profile').account) : null);
-        }
+        const userCheck = localStorage.getItem('profile');
         
-        window.addEventListener('storage', checkUser)
-
-        return () => {
-          window.removeEventListener('storage', checkUser)
+        if (userCheck) {
+            // setUser(userCheck ? JSON.parse(localStorage.getItem('profile')).account : null);
+            setUser(JSON.parse(localStorage.getItem('profile')).account);
         }
-    }, [])
+
+      }, [isUser])
 
     return (
         <Box sx={{width: {xl: '1200px'}}} m='auto' p='0'>
             <Routes>
-                <Route path='/' exact element={!user ? <Login/> : <Navigate replace to="/home"/>}/>
+                <Route path='/' exact element={!user ? <Login setIsUser={setIsUser}/> : <Navigate replace to="/home"/>}/>
                 <Route path='/user/:id/verify/:token' element={<Verification/>}/>
                 <Route path='/home' element={user ? <Home/> : <Navigate replace to="/"/>} />
                 {/* <Route path='/' element={<Verification/>}/> */}

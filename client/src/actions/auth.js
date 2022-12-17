@@ -14,8 +14,8 @@ export const signup = (formData) => async (dispatch) => {
         dispatch(loadingState(false))
     } catch (error) {
         // console.log(error.response.data);
-        dispatch(loadingState(false))
         dispatch(authError(error.response.data))
+        dispatch(loadingState(false))
     }
 }
 
@@ -32,20 +32,25 @@ export const verify = (id, token) => async (dispatch) => {
     }
 }
 
-export const signin = (formData, navigate, setUser) => async (dispatch) => {
+export const signin = (formData, navigate, setIsUser) => async (dispatch) => {
     try {
         // login user
         dispatch(loadingState(true));
 
         const {data} = await api.signIn(formData);
         //console.log(data);
-        dispatch(authData(data));
-
+        // check if user have veryfied account, backend send another data in this case, if not - dispatch authInfo instead authData
+        if (data?.account){
+            dispatch(authData(data));
+            setIsUser(true);
+            navigate('/home')
+        } else {
+            dispatch(authInfo(data));
+        }
+        
         dispatch(loadingState(false));
-
-        navigate('/home')
     } catch (error) {
-        dispatch(loadingState(false))
         dispatch(authError(error.response.data))
+        dispatch(loadingState(false))
     }
 }

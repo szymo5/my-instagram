@@ -68,7 +68,7 @@ export const signin = async (req, res) => {
               }).save();
           
             const message = `Open this link to verify your MyInstagram account: ${process.env.BASE_URL}/user/${user._id}/verify/${token.token}`;
-            await sendEmail(result.email, "Verify Email", message);
+            await sendEmail(user.email, "Verify Email", message);
             return res.status(200).json({message: "New verify link send to email"});
         }
 

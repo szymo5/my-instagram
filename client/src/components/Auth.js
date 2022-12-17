@@ -17,7 +17,7 @@ import { clearState } from '../redux/auth';
 
 const initialState = {email: '', username:'', password:'', confirmPassword: ''};
 
-const Auth = () => {
+const Auth = ({setIsUser}) => {
     const {message, error, isLoading} = useSelector(state => state.auth)
 
     const [isSignUp, setIsSignUp] = useState(false);
@@ -33,7 +33,7 @@ const Auth = () => {
         if(isSignUp) {
             dispatch(signup(formData))
         } else {
-            dispatch(signin(formData, navigate))
+            dispatch(signin(formData, navigate, setIsUser))
             //console.log('login')
         }
     }
@@ -41,6 +41,10 @@ const Auth = () => {
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value});
     }
+
+
+    const info = `Konto nie jest aktywowane.
+                Wysłano link weryfikacyjny na podany email.`
 
     return (
         <>
@@ -53,12 +57,13 @@ const Auth = () => {
                     {isSignUp && <Typography color="#8e8e8e" textAlign="center" fontSize="17px" fontWeight="600" mt={2} sx={{lineHeight: '1.2'}}>Zarejestruj się, aby przeglądać zdjęcia i filmy znajomych.</Typography>}
                     <Stack component="form" mt={3} width="100%" spacing={1} onSubmit={handleSubmit}>
                         {isSignUp && <TextField name="username" label="Nazwa użytkownika" variant="outlined" size="small" fullWidth onChange={handleChange}/>}
-                        <TextField name="email" label="Adres email" variant="outlined" size="small" fullWidth sx={{fontSize: '12px'}} error={error.type === 'email' ? true : false} helperText={error.type === 'email' && error.errorMsg} onChange={handleChange}/>
-                        <TextField name="password" type="password" label="Hasło" variant="outlined" size="small" fullWidth error={error.type === 'password' ? true : false} helperText={error.type === 'password' && error.errorMsg} onChange={handleChange}/>
+                        <TextField value={formData.email} name="email" label="Adres email" variant="outlined" size="small" fullWidth sx={{fontSize: '12px'}} error={error.type === 'email' ? true : false} helperText={error.type === 'email' && error.errorMsg} onChange={handleChange}/>
+                        <TextField value={formData.password} name="password" type="password" label="Hasło" variant="outlined" size="small" fullWidth error={error.type === 'password' ? true : false} helperText={error.type === 'password' && error.errorMsg} onChange={handleChange}/>
                         {isSignUp && <TextField name="confirmPassword" type="password" label="Powtórz hasło" variant="outlined" size="small" fullWidth error={error.type === 'password' ? true : false} helperText={error.type === 'password' && error.errorMsg} onChange={handleChange}/>}
                         <Button type="submit" variant="contained" sx={{marginTop: '20px !important', backgroundColor: '#0095f6', fontWeight: '600', textTransform: 'none'}}>{isSignUp ? 'Zarejestruj się' : 'Zaloguj się'}</Button>
                     </Stack>
                     {(isSignUp && message) && (<Box mt={2} borderRadius="3px" p="6px 12px" sx={{backgroundColor: 'rgb(7,186, 121, 0.8)'}}><Typography fontSize="13px" color="#fff">Wysłano na podany email link weryfikacyjny.</Typography></Box>)}
+                    {(!isSignUp && message) && (<Box mt={2} borderRadius="3px" p="6px 12px" sx={{backgroundColor: 'rgb(7,186, 121, 0.8)'}}><Typography fontSize="13px" color="#fff" textAlign="center" style={{whiteSpace: 'pre-line'}}>{info}</Typography></Box>)}
                     <Stack direction="row" width="100%" alignItems="center" sx={{marginBottom: '8px'}}>
                         <Divider sx={{width: '40%'}}/>
                         <Typography fontSize="12px" m={2} color="#8e8e8e" sx={{fontWeight: '700'}}>
