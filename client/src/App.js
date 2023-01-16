@@ -7,6 +7,7 @@ import './App.css';
 import Login from './pages/Login'
 import Verification from './pages/Verification'
 import Home from './pages/Home'
+import PasswordReset from './pages/PasswordReset';
 
 
 const App = () => {
@@ -33,6 +34,7 @@ const App = () => {
                 <Route path='/' exact element={!user ? <Login setIsUser={setIsUser}/> : <Navigate replace to="/home"/>}/>
                 <Route path='/user/:id/verify/:token' element={<Verification/>}/>
                 <Route path='/home' element={user ? <Home/> : <Navigate replace to="/"/>} />
+                <Route path='/password/reset' element={!user ? <PasswordReset/> : <Navigate replace to="/"/>} />
                 {/* <Route path='/' element={<Verification/>}/> */}
             </Routes>
         </Box>

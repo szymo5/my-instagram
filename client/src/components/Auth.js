@@ -80,7 +80,7 @@ const Auth = ({setIsUser}) => {
                         </Button>
                     </Stack>
                     {!isSignUp && (
-                        <Link to="/" className="link">
+                        <Link to="/password/reset" className="link">
                         <Typography fontSize="12px">
                             Nie pamiętasz hasła?
                         </Typography>
