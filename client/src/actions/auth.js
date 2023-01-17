@@ -54,3 +54,19 @@ export const signin = (formData, navigate, setIsUser) => async (dispatch) => {
         dispatch(loadingState(false))
     }
 }
+
+export const requestpasswordreset = (formData) => async (dispatch) => {
+    try {
+        dispatch(loadingState(true));
+
+        const {data} = await api.requestPasswordReset(formData)
+
+        dispatch(authInfo(data))
+
+        dispatch(loadingState(false))
+
+    } catch (error) {
+        dispatch(authError(error.response.data))
+        dispatch(loadingState(false))
+    }
+}

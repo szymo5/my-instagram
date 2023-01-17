@@ -107,3 +107,27 @@ export const verify = async (req, res) => {
         console.log(error);
     }
 }
+
+export const requestResetPassword = async (req, res) => {
+    const {email} = req.body;
+
+    try {
+        const isEmail = validator.isEmail(email);
+        if(!isEmail) return res.status(400).json({errorMsg: "Invalid adres email", type: 'email'});
+
+        const user = await User.findOne({email});
+        if(!user) return res.status(404).json({errorMsg: "User doesn't exist", type: "email"});
+
+        let token = await new Token({
+            userId: user._id,
+            token: crypto.randomBytes(32).toString("hex"),
+        }).save();
+
+        const message = `Open this link to reset your password: ${process.env.BASE_URL}/user/${user._id}/password/reset/${token.token}`;
+        await sendEmail(user.email, "Password reset", message);
+        res.status(200).json({message: "success"});
+
+    } catch (error) {
+        console.log(error);
+    }
+}
