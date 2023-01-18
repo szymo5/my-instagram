@@ -131,3 +131,49 @@ export const requestResetPassword = async (req, res) => {
         console.log(error);
     }
 }
+
+export const checkPasswordReset = async (req, res) => {
+    const {id, token: passwordToken} = req.params;
+
+    try {
+        const user = await User.findOne({ _id: id });
+
+        if (!user) return res.status(400).json({errorMsg: "Invalid link", type: "PasswordReset"});
+
+        const token = await Token.findOne({
+            userId: user._id,
+            token: passwordToken,
+        });
+
+        if (!token) return res.status(400).json({errorMsg: "Invalid link", type: "PasswordReset"});
+
+        res.json({message: "Password can be change"});
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const passwordReset = async (req, res) => {
+    const {id} = req.params;
+    const {password: newPassword} = req.body;
+
+    try {
+        const pass = newPassword.length > 4 ? true : false;
+        if (!pass) return res.status(404).json({errorMsg: "Password is too short", type: "password"});
+
+        const user = await User.findOne({ _id: id });
+
+        const token = await Token.findOne({
+            userId: user._id,
+        });
+
+        const hashedPassword = await bcrypt.hash(newPassword, 12);
+
+        await User.updateOne({ _id: user._id, password: hashedPassword});
+        await Token.findByIdAndRemove(token._id);
+
+        res.json({message: "Password changed"});
+    } catch (error) {
+        console.log(error);
+    }
+}
