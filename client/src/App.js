@@ -31,11 +31,12 @@ const App = () => {
     //   }, [isUser])
 
     return (
-        <Box sx={{width: {xl: '1200px'}}} m='auto' p='0'>
+        // <Box sx={{width: {xl: '1200px'}}} m='auto' p='0'>
+        <Box sx={{width: '100%'}} m='auto' p='0'>
             <Routes>
                 <Route path='/' exact element={!user ? <Login setIsUser={setIsUser}/> : <Navigate replace to="/home"/>}/>
                 <Route path='/user/:id/verify/:token' element={<Verification/>}/>
-                <Route path='/home' element={user ? <Home/> : <Navigate replace to="/"/>} />
+                <Route path='/home/*' element={user ? <Home/> : <Navigate replace to="/"/>} />
                 <Route path='/password/reset' element={!user ? <PasswordResetRequest/> : <Navigate replace to="/"/>} />
                 <Route path='/user/:id/password/reset/:token' element={<PasswordReset/>}/>
                 <Route path='/password/reset/success' element={<PasswordResetSuccess/>}/>
