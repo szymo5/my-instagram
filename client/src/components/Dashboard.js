@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Box, Stack, Typography, Avatar, Menu, MenuItem } from "@mui/material";
 
@@ -22,6 +23,8 @@ import SmsFailedOutlinedIcon from '@mui/icons-material/SmsFailedOutlined';
 const Dashboard = () => {
     const user = JSON.parse(localStorage.getItem("profile")).account;
 
+    const navigate = useNavigate();
+
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -32,24 +35,29 @@ const Dashboard = () => {
     };
 
     const menuItems = [
-        { name: "Strona Główna", icon: <HomeIcon sx={{height: '30px', width: '30px'}}/> },
-        { name: "Szukaj", icon: <SearchIcon sx={{height: '30px', width: '30px'}}/> },
-        { name: "Eksploruj", icon: <ExploreIcon sx={{height: '30px', width: '30px'}}/> },
-        { name: "Reels", icon: <OndemandVideoIcon sx={{height: '30px', width: '30px'}}/> },
-        { name: "Wiadomości", icon: <NearMeIcon sx={{height: '30px', width: '30px'}}/> },
-        { name: "Powiadomienia", icon: <FavoriteBorderIcon sx={{height: '30px', width: '30px'}}/> },
-        { name: "Utwórz", icon: <AddCircleOutlineIcon sx={{height: '30px', width: '30px'}}/> }
+        { name: "Strona Główna", icon: <HomeIcon sx={{height: '30px', width: '30px'}}/>, path: null },
+        { name: "Szukaj", icon: <SearchIcon sx={{height: '30px', width: '30px'}}/>, path: null },
+        { name: "Eksploruj", icon: <ExploreIcon sx={{height: '30px', width: '30px'}}/>, path: null },
+        { name: "Reels", icon: <OndemandVideoIcon sx={{height: '30px', width: '30px'}}/>, path: null },
+        { name: "Wiadomości", icon: <NearMeIcon sx={{height: '30px', width: '30px'}}/>, path: null },
+        { name: "Powiadomienia", icon: <FavoriteBorderIcon sx={{height: '30px', width: '30px'}}/>, path: null },
+        { name: "Utwórz", icon: <AddCircleOutlineIcon sx={{height: '30px', width: '30px'}}/>, path: null }
     ];
 
     const moreMenuItems = [
-        {name: "Ustawienia", icon: <SettingsIcon/> },
-        {name: "Zapisane", icon: <BookmarkBorderIcon/> },
-        {name: "Zmień wygląd", icon: <DarkModeOutlinedIcon/> },
-        {name: "Twoja aktywność", icon: <WatchLaterOutlinedIcon/> },
-        {name: "Zgłoś problem", icon: <SmsFailedOutlinedIcon/> },
-        {name: "Przełącz konto", icon: null },
-        {name: "Wyloguj się", icon: null },
+        {name: "Ustawienia", icon: <SettingsIcon/>, path: null},
+        {name: "Zapisane", icon: <BookmarkBorderIcon/>, path: null },
+        {name: "Zmień wygląd", icon: <DarkModeOutlinedIcon/>, path: null },
+        {name: "Twoja aktywność", icon: <WatchLaterOutlinedIcon/>, path: null },
+        {name: "Zgłoś problem", icon: <SmsFailedOutlinedIcon/>, path: null },
+        {name: "Przełącz konto", icon: null, path: null },
+        // {name: "Wyloguj się", icon: null, path: null },
     ]
+
+    const logout = () => {
+        localStorage.clear();
+        navigate(0);
+    }
 
     return ( 
         <Stack width="336px" alignItems="center" sx={{background: 'black', borderRight: '1px solid #383838'}}>
@@ -64,10 +72,12 @@ const Dashboard = () => {
                             <Typography pl="12px">{item.name}</Typography>
                         </Stack>
                     ))}
-                    <Stack direction="row" color="white" m="4px" p="12px" alignItems="center" sx={{borderRadius: '35px', cursor: 'pointer', transition: 'all 0.3s', '&:hover': {background: '#111'}}}>
-                        <Avatar sx={{height: '25px', width: '25px'}} src={user?.image}/>
-                        <Typography pl="12px">Profil</Typography>
-                    </Stack>
+                    <Link to={`/home/${user.username}`} className="link">
+                        <Stack direction="row" color="white" m="4px" p="12px" alignItems="center" sx={{borderRadius: '35px', cursor: 'pointer', transition: 'all 0.3s', '&:hover': {background: '#111'}}}>
+                            <Avatar sx={{height: '25px', width: '25px'}} src={user?.image}/>
+                            <Typography pl="12px">Profil</Typography>
+                        </Stack>
+                    </Link>
                 </Stack>
                 <Stack direction="row" width="279px" color="white" m="4px" p="12px" alignItems="center" sx={{borderRadius: '35px', cursor: 'pointer', transition: 'all 0.3s', '&:hover': {background: '#111'}}} onClick={handleClick}>
                     <MenuIcon sx={{height: '30px', width: '30px'}}/>
@@ -90,7 +100,6 @@ const Dashboard = () => {
                     sx={{
                         '& .MuiPaper-root': {
                             width: '240px',
-                            // height: '100px',
                             marginBottom: '100px',
                             background: '#222',
                             color: '#fff'
@@ -98,11 +107,14 @@ const Dashboard = () => {
                     }}
                 >
                     {moreMenuItems.map((item, i) => (
-                        <MenuItem onClick={handleClose} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', p:"10px 15px"}}>
+                        <MenuItem onClick={handleClose} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', p:"10px 15px", transition: 'all 0.3s', '&:hover': {background: '#111'}}}>
                             {item.name}
                             {item?.icon}
                         </MenuItem>
                     ))}
+                    <MenuItem onClick={logout} sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', p:"10px 15px", transition: 'all 0.3s', '&:hover': {background: '#111'}}}>
+                        Wyloguj się
+                    </MenuItem>
                 </Menu>
             </Stack>
         </Stack>
