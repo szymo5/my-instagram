@@ -20,8 +20,8 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';
 import SmsFailedOutlinedIcon from '@mui/icons-material/SmsFailedOutlined';
 
-const Dashboard = () => {
-    const user = JSON.parse(localStorage.getItem("profile")).account;
+const Dashboard = ({user, setIsCreate}) => {
+    // const user = JSON.parse(localStorage.getItem("profile")).account;
 
     const navigate = useNavigate();
 
@@ -41,7 +41,7 @@ const Dashboard = () => {
         { name: "Reels", icon: <OndemandVideoIcon sx={{height: '30px', width: '30px'}}/>, path: null },
         { name: "Wiadomości", icon: <NearMeIcon sx={{height: '30px', width: '30px'}}/>, path: null },
         { name: "Powiadomienia", icon: <FavoriteBorderIcon sx={{height: '30px', width: '30px'}}/>, path: null },
-        { name: "Utwórz", icon: <AddCircleOutlineIcon sx={{height: '30px', width: '30px'}}/>, path: null }
+        { name: "Utwórz", icon: <AddCircleOutlineIcon sx={{height: '30px', width: '30px'}}/>, path: 'create' }
     ];
 
     const moreMenuItems = [
@@ -67,7 +67,7 @@ const Dashboard = () => {
                 </Box>
                 <Stack width="100%" height="80vh">
                     {menuItems.map((item, i) => (
-                        <Stack direction="row" color="white" m="4px" p="12px" alignItems="center" sx={{borderRadius: '35px', cursor: 'pointer', transition: 'all 0.3s', '&:hover': {background: '#111'}}}>
+                        <Stack direction="row" color="white" m="4px" p="12px" alignItems="center" sx={{borderRadius: '35px', cursor: 'pointer', transition: 'all 0.3s', '&:hover': {background: '#111'}}} onClick={() => {item.path === 'create' ? setIsCreate(true) : setIsCreate(false)}}>
                             {item.icon}
                             <Typography pl="12px">{item.name}</Typography>
                         </Stack>
