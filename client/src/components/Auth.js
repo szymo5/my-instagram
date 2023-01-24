@@ -56,7 +56,7 @@ const Auth = ({setIsUser}) => {
                     <img src={Logo} alt="logo"/>
                     {isSignUp && <Typography color="#8e8e8e" textAlign="center" fontSize="17px" fontWeight="600" mt={2} sx={{lineHeight: '1.2'}}>Zarejestruj się, aby przeglądać zdjęcia i filmy znajomych.</Typography>}
                     <Stack component="form" mt={3} width="100%" spacing={1} onSubmit={handleSubmit}>
-                        {isSignUp && <TextField name="username" label="Nazwa użytkownika" variant="outlined" size="small" fullWidth onChange={handleChange}/>}
+                        {isSignUp && <TextField name="username" label="Nazwa użytkownika" variant="outlined" size="small" fullWidth error={error.type === 'username' ? true : false} helperText={error.type === 'username' && error.errorMsg} onChange={handleChange}/>}
                         <TextField value={formData.email} name="email" label="Adres email" variant="outlined" size="small" fullWidth sx={{fontSize: '12px'}} error={error.type === 'email' ? true : false} helperText={error.type === 'email' && error.errorMsg} onChange={handleChange}/>
                         <TextField value={formData.password} name="password" type="password" label="Hasło" variant="outlined" size="small" fullWidth error={error.type === 'password' ? true : false} helperText={error.type === 'password' && error.errorMsg} onChange={handleChange}/>
                         {isSignUp && <TextField name="confirmPassword" type="password" label="Powtórz hasło" variant="outlined" size="small" fullWidth error={error.type === 'password' ? true : false} helperText={error.type === 'password' && error.errorMsg} onChange={handleChange}/>}

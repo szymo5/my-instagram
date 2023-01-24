@@ -20,6 +20,10 @@ export const signup = async (req, res) => {
 
         if(password !== confirmPassword) return res.status(400).json({errorMsg: "Passwords don't match.", type: "password"});
 
+        if(username.length === 0){
+            return res.status(400).json({errorMsg: "Invalid username", type: "username"});
+        }
+
         const existingUser = await User.findOne({email});
         if(existingUser) return res.status(404).json({errorMsg: "User already exist.", type: "email"});
 
@@ -46,6 +50,9 @@ export const signin = async (req, res) => {
     const {email, password} = req.body;
 
     try {
+        const isEmail = validator.isEmail(email);
+        if(!isEmail) return res.status(404).json({errorMsg: "Invalid Email", type: "email"});
+
         const user = await User.findOne({email});
         if(!user) return res.status(400).json({errorMsg: "Invalid email", type: "email"});
 

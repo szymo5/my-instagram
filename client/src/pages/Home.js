@@ -6,6 +6,7 @@ import { Stack } from '@mui/material';
 import Dashboard from '../components/Dashboard';
 import User from '../components/User';
 import Create from '../components/Create';
+import Main from '../components/Main';
 
 const Home = () => {
     const [isCreate, setIsCreate] = useState(false);
@@ -17,6 +18,7 @@ const Home = () => {
             <Dashboard user={user} setIsCreate={setIsCreate}/>
             <Routes>
                 <Route path={`${user.username}`} element={<User/>}/>
+                <Route path='/main' element={<Main/>}/>
             </Routes>
         </Stack>
      );
