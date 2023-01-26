@@ -1,10 +1,14 @@
 import { useState, useRef } from "react";
-import {Stack, Typography } from "@mui/material";
+import {Stack, Typography, Box } from "@mui/material";
 import ImageCropDialog from "./ImageCrop";
 
+import getCroppedImg from "../utils/cropImage";
+
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 const Create = ({setIsCreate}) => {
-    const [image, setImage] = useState({id: false, imageUrl: false});
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [image, setImage] = useState({id: false, imageUrl: false, croppedImage: false});
     const [dragActive, setDragActive] = useState(false);
     const inputRef = useRef(null);
 
@@ -24,7 +28,12 @@ const Create = ({setIsCreate}) => {
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             console.log(e.dataTransfer.files)
-            setImage({imageUrl: e.dataTransfer.files[0].name});
+            // setImage({imageUrl: e.dataTransfer.files[0].name});
+            const reader = new FileReader();
+			reader.readAsDataURL(e.dataTransfer.files[0]);
+			reader.addEventListener("load", () => {
+				setImage({imageUrl: reader.result});
+			});
         }
     };
 
@@ -42,7 +51,14 @@ const Create = ({setIsCreate}) => {
 			});
 		}
     };
-    
+
+    const onCrop = async () => {
+        const croppedImageUrl = await getCroppedImg(image.imageUrl, croppedAreaPixels);
+        // setCroppedImageFor(id, croppedImageUrl);
+        console.log(croppedImageUrl);
+        setImage({croppedImage: croppedImageUrl});
+    };
+
     const onButtonClick = () => {
         inputRef.current.click();
     }
@@ -54,11 +70,22 @@ const Create = ({setIsCreate}) => {
         }
     }
 
+    const closeCreateForButton = () => {
+        setIsCreate(false);
+        setImage(false);
+    }
+
 
     return ( 
         <Stack className="main" justifyContent="center" alignItems="center" sx={{width: '100%', height: '100%', background: 'rgb(0,0,0,0.7)', position: 'absolute', top: '0', left: '0', zIndex: '1'}} onClick={closeCreate} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
             <Stack width="38%" height="80%" sx={{background: 'rgb(38,38,38)', borderRadius: '12px'}}>
-                <Typography sx={{color: 'rgb(250,250,250)', textAlign: 'center', p:'10px', borderBottom: '1px solid rgb(54,54,54)', fontWeight: '500'}}>Utwórz nowy post</Typography>
+                <Stack direction="row" justifyContent='center' sx={{color: 'rgb(250,250,250)', textAlign: 'center', p:'8px', borderBottom: '1px solid rgb(54,54,54)', fontWeight: '500'}}>
+                    <Stack direction="row" alignItems='center' justifyContent={image.imageUrl ? 'space-between' : 'center'} sx={{width: '95%'}}>
+                        {image.imageUrl && <KeyboardBackspaceIcon sx={{cursor: 'pointer', fontSize: '30px'}} onClick={closeCreateForButton}/>}
+                        <Typography>{image.imageUrl ? 'Przytnij' : 'Utwórz nowy post'}</Typography>
+                        {image.imageUrl && <Typography sx={{cursor: 'pointer', color: 'rgb(0, 146, 246)', fontSize: '15px'}} onClick={onCrop}>Dalej</Typography>}
+                    </Stack>
+                </Stack>
                 {image.imageUrl ? (
                     <ImageCropDialog
                         id={image.id}
@@ -66,6 +93,8 @@ const Create = ({setIsCreate}) => {
                         cropInit={image.crop}
                         zoomInit={image.zoom}
                         aspectInit={image.aspect}
+                        croppedAreaPixels={croppedAreaPixels}
+                        setCroppedAreaPixels={setCroppedAreaPixels}
                     // onCancel={onCancel}
                     // setCroppedImageFor={setCroppedImageFor}
                     // resetImage={resetImage}

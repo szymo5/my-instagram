@@ -19,6 +19,8 @@ const ImageCropDialog = ({
   onCancel,
   setCroppedImageFor,
   resetImage,
+  croppedAreaPixels,
+  setCroppedAreaPixels
 }) => {
   if (zoomInit == null) {
     zoomInit = 1;
@@ -27,12 +29,12 @@ const ImageCropDialog = ({
     cropInit = { x: 0, y: 0 };
   }
   if (aspectInit == null) {
-    aspectInit = aspectRatios[2];
+    aspectInit = aspectRatios[0];
   }
   const [zoom, setZoom] = useState(zoomInit);
   const [crop, setCrop] = useState(cropInit);
   const [aspect, setAspect] = useState(aspectInit);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  // const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
   const onCropChange = (crop) => {
     setCrop(crop);
@@ -52,10 +54,10 @@ const ImageCropDialog = ({
     setCroppedAreaPixels(croppedAreaPixels);
   };
 
-  const onCrop = async () => {
-    const croppedImageUrl = await getCroppedImg(imageUrl, croppedAreaPixels);
-    setCroppedImageFor(id, crop, zoom, aspect, croppedImageUrl);
-  };
+  // const onCrop = async () => {
+  //   const croppedImageUrl = await getCroppedImg(imageUrl, croppedAreaPixels);
+  //   setCroppedImageFor(id, crop, zoom, aspect, croppedImageUrl);
+  // };
 
   const onResetImage = () => {
     resetImage(id);
@@ -72,6 +74,7 @@ const ImageCropDialog = ({
           onCropChange={onCropChange}
           onZoomChange={onZoomChange}
           onCropComplete={onCropComplete}
+          objectFit="vertical-cover"
         //   disableAutomaticStylesInjection={true}
         />
       </Stack>
