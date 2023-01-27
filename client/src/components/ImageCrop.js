@@ -16,8 +16,6 @@ const ImageCropDialog = ({
   cropInit,
   zoomInit,
   aspectInit,
-  onCancel,
-  setCroppedImageFor,
   resetImage,
   croppedAreaPixels,
   setCroppedAreaPixels

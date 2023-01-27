@@ -14,7 +14,7 @@ const Home = () => {
 
     return ( 
         <Stack direction="row" sx={{width: '100%', height: '100vh', background: 'black', overflow: 'hidden'}}>
-            {isCreate && <Create setIsCreate={setIsCreate}/>}
+            {isCreate && <Create setIsCreate={setIsCreate} user={user}/>}
             <Dashboard user={user} setIsCreate={setIsCreate}/>
             <Routes>
                 <Route path={`${user.username}`} element={<User/>}/>

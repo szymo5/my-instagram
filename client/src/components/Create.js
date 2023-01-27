@@ -1,12 +1,12 @@
 import { useState, useRef } from "react";
-import {Stack, Typography, Box } from "@mui/material";
+import {Stack, Typography, Box, Avatar } from "@mui/material";
 import ImageCropDialog from "./ImageCrop";
 
 import getCroppedImg from "../utils/cropImage";
 
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
-const Create = ({setIsCreate}) => {
+const Create = ({setIsCreate, user}) => {
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [image, setImage] = useState({id: false, imageUrl: false, croppedImage: false});
     const [dragActive, setDragActive] = useState(false);
@@ -32,7 +32,7 @@ const Create = ({setIsCreate}) => {
             const reader = new FileReader();
 			reader.readAsDataURL(e.dataTransfer.files[0]);
 			reader.addEventListener("load", () => {
-				setImage({imageUrl: reader.result});
+				setImage({...image, imageUrl: reader.result});
 			});
         }
     };
@@ -47,16 +47,14 @@ const Create = ({setIsCreate}) => {
 			const reader = new FileReader();
 			reader.readAsDataURL(e.target.files[0]);
 			reader.addEventListener("load", () => {
-				setImage({imageUrl: reader.result});
+				setImage({...image, imageUrl: reader.result});
 			});
 		}
     };
 
     const onCrop = async () => {
         const croppedImageUrl = await getCroppedImg(image.imageUrl, croppedAreaPixels);
-        // setCroppedImageFor(id, croppedImageUrl);
-        console.log(croppedImageUrl);
-        setImage({croppedImage: croppedImageUrl});
+        setImage({...image, croppedImage: croppedImageUrl});
     };
 
     const onButtonClick = () => {
@@ -75,10 +73,9 @@ const Create = ({setIsCreate}) => {
         setImage(false);
     }
 
-
     return ( 
         <Stack className="main" justifyContent="center" alignItems="center" sx={{width: '100%', height: '100%', background: 'rgb(0,0,0,0.7)', position: 'absolute', top: '0', left: '0', zIndex: '1'}} onClick={closeCreate} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
-            <Stack width="38%" height="80%" sx={{background: 'rgb(38,38,38)', borderRadius: '12px'}}>
+            <Stack width={image.croppedImage ? '55%' : '38%'} height="80%" sx={{background: 'rgb(38,38,38)', borderRadius: '12px'}}>
                 <Stack direction="row" justifyContent='center' sx={{color: 'rgb(250,250,250)', textAlign: 'center', p:'8px', borderBottom: '1px solid rgb(54,54,54)', fontWeight: '500'}}>
                     <Stack direction="row" alignItems='center' justifyContent={image.imageUrl ? 'space-between' : 'center'} sx={{width: '95%'}}>
                         {image.imageUrl && <KeyboardBackspaceIcon sx={{cursor: 'pointer', fontSize: '30px'}} onClick={closeCreateForButton}/>}
@@ -86,7 +83,7 @@ const Create = ({setIsCreate}) => {
                         {image.imageUrl && <Typography sx={{cursor: 'pointer', color: 'rgb(0, 146, 246)', fontSize: '15px'}} onClick={onCrop}>Dalej</Typography>}
                     </Stack>
                 </Stack>
-                {image.imageUrl ? (
+                {image.imageUrl && !image.croppedImage ? (
                     <ImageCropDialog
                         id={image.id}
                         imageUrl={image.imageUrl}
@@ -99,6 +96,20 @@ const Create = ({setIsCreate}) => {
                     // setCroppedImageFor={setCroppedImageFor}
                     // resetImage={resetImage}
                     />
+                ) : image.croppedImage ? (
+                    <Stack direction="row"  alignItems="center" height="100%">
+                        <Box style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height:'100%'}}>
+                            <Box sx={{width: image.croppedImage.width, height: image.croppedImage.height}}>
+                                <img src={image.croppedImage} alt="cropped image" width="100%" height="100%"/>
+                            </Box>
+                        </Box>
+                        <Stack sx={{width: '80%', height: '100%'}}>
+                            <Stack direction="row" alignItems='center' sx={{width: '100%'}}>
+                                <Avatar></Avatar>
+                                <Typography>{user.username}</Typography>
+                            </Stack>
+                        </Stack>
+                    </Stack>
                 ) : (
                     <Stack justifyContent="center" alignItems="center" sx={{width: '100%', height: '100%', background: dragActive && 'rgb(18,18,18)'}}>
                         <Stack>
