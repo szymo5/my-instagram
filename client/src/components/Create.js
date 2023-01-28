@@ -55,6 +55,7 @@ const Create = ({setIsCreate, user}) => {
     const onCrop = async () => {
         const croppedImageUrl = await getCroppedImg(image.imageUrl, croppedAreaPixels);
         setImage({...image, croppedImage: croppedImageUrl});
+        console.log(croppedImageUrl)
     };
 
     const onButtonClick = () => {
@@ -79,7 +80,7 @@ const Create = ({setIsCreate, user}) => {
                 <Stack direction="row" justifyContent='center' sx={{color: 'rgb(250,250,250)', textAlign: 'center', p:'8px', borderBottom: '1px solid rgb(54,54,54)', fontWeight: '500'}}>
                     <Stack direction="row" alignItems='center' justifyContent={image.imageUrl ? 'space-between' : 'center'} sx={{width: '95%'}}>
                         {image.imageUrl && <KeyboardBackspaceIcon sx={{cursor: 'pointer', fontSize: '30px'}} onClick={closeCreateForButton}/>}
-                        <Typography>{image.imageUrl ? 'Przytnij' : 'Utwórz nowy post'}</Typography>
+                        <Typography>{image.imageUrl && !image.croppedImage ? 'Przytnij' : image.croppedImage ? "Edytuj" : 'Utwórz nowy post'}</Typography>
                         {image.imageUrl && <Typography sx={{cursor: 'pointer', color: 'rgb(0, 146, 246)', fontSize: '15px'}} onClick={onCrop}>Dalej</Typography>}
                     </Stack>
                 </Stack>
@@ -97,17 +98,32 @@ const Create = ({setIsCreate, user}) => {
                     // resetImage={resetImage}
                     />
                 ) : image.croppedImage ? (
-                    <Stack direction="row"  alignItems="center" height="100%">
-                        <Box style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height:'100%'}}>
-                            <Box sx={{width: image.croppedImage.width, height: image.croppedImage.height}}>
-                                <img src={image.croppedImage} alt="cropped image" width="100%" height="100%"/>
+                    <Stack direction="row" height="100%" width="100%" sx={{overflow: 'hidden'}}>
+                        <Box style={{justifyContent: 'center', alignItems: 'center', height:'100%', width:'68%', background: 'rgb(18,18,18)'}}>
+                            <Box sx={{width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', objectFit: 'contain'}}>
+                                <img src={image.croppedImage} alt="cropped image" style={{width: 'auto', height: '100%', transform: 'scale(1)'}}/>
                             </Box>
                         </Box>
-                        <Stack sx={{width: '80%', height: '100%'}}>
-                            <Stack direction="row" alignItems='center' sx={{width: '100%'}}>
-                                <Avatar></Avatar>
-                                <Typography>{user.username}</Typography>
+                        <Stack sx={{width: '32%', height: '100%'}}>
+                            <Stack direction="row" alignItems='center' sx={{width: '100%', margin: '0 auto', padding: '18px 16px 14px 16px', boxSizing: 'border-box'}}>
+                                <Avatar sx={{height: '32px', width: '32px'}}></Avatar>
+                                <Typography sx={{fontWeight: '500', fontSize: '14px', color: "rgb(250,250,250)", ml: '15px'}}>{user.username}</Typography>
                             </Stack>
+                            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'}}>
+                                <textarea placeholder="Dodaj opis" className="text" style={{background: 'transparent', 
+                                                                                            width: '100%', 
+                                                                                            height: '100%', 
+                                                                                            padding: '3px 16px', 
+                                                                                            boxSizing: 'border-box', 
+                                                                                            border:'none', 
+                                                                                            resize: 'none', 
+                                                                                            whiteSpace: 'wrap', 
+                                                                                            overflow: 'auto',
+                                                                                            color: 'rgb(250,250,250)',
+                                                                                            fontSize: '16px',
+                                                                                            fontFamily: 'Roboto'}}>
+                                </textarea>
+                            </Box>
                         </Stack>
                     </Stack>
                 ) : (

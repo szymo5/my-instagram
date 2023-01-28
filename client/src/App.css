@@ -25,7 +25,9 @@
 .btn:hover{
   color: #E0F1FF;
 }
-
+.text:focus{
+  outline: none;
+}
 
 @media screen and (max-width: 875px) {
   .phoneImg {
