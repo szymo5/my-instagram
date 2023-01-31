@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 import userRoutes from './routes/users.js';
+import postRoutes from './routes/post.js';
 
 const app = express();
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(cors());
 
 
 app.use('/user', userRoutes);
+app.use('/post', postRoutes);
 
 app.get('/', (req, res) => {
     res.send("MyInstagram server")

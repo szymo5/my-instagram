@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+
 import {Stack, Typography, Box, Avatar } from "@mui/material";
 import ImageCropDialog from "./ImageCrop";
 
@@ -8,9 +10,12 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 const Create = ({setIsCreate, user}) => {
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [describe, setDescribe] = useState('');
     const [image, setImage] = useState({id: false, imageUrl: false, croppedImage: false});
     const [dragActive, setDragActive] = useState(false);
+
     const inputRef = useRef(null);
+    const dispatch = useDispatch();
 
     const handleDrag = (e) => {
         e.preventDefault();
@@ -74,6 +79,13 @@ const Create = ({setIsCreate, user}) => {
         setImage(false);
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+    }
+
+
+
     return ( 
         <Stack className="main" justifyContent="center" alignItems="center" sx={{width: '100%', height: '100%', background: 'rgb(0,0,0,0.7)', position: 'absolute', top: '0', left: '0', zIndex: '1'}} onClick={closeCreate} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
             <Stack width={image.croppedImage ? '55%' : '38%'} height="80%" sx={{background: 'rgb(38,38,38)', borderRadius: '12px'}}>
@@ -81,7 +93,7 @@ const Create = ({setIsCreate, user}) => {
                     <Stack direction="row" alignItems='center' justifyContent={image.imageUrl ? 'space-between' : 'center'} sx={{width: '95%'}}>
                         {image.imageUrl && <KeyboardBackspaceIcon sx={{cursor: 'pointer', fontSize: '30px'}} onClick={closeCreateForButton}/>}
                         <Typography>{image.imageUrl && !image.croppedImage ? 'Przytnij' : image.croppedImage ? "Edytuj" : 'Utwórz nowy post'}</Typography>
-                        {image.imageUrl && <Typography sx={{cursor: 'pointer', color: 'rgb(0, 146, 246)', fontSize: '15px'}} onClick={onCrop}>Dalej</Typography>}
+                        {image.imageUrl && <Typography sx={{cursor: 'pointer', color: 'rgb(0, 146, 246)', fontSize: '15px'}} onClick={image.croppedImage ? handleSubmit : onCrop}>{image.croppedImage ? 'Udostępnij' : 'Dalej'}</Typography>}
                     </Stack>
                 </Stack>
                 {image.imageUrl && !image.croppedImage ? (
@@ -110,19 +122,19 @@ const Create = ({setIsCreate, user}) => {
                                 <Typography sx={{fontWeight: '500', fontSize: '14px', color: "rgb(250,250,250)", ml: '15px'}}>{user.username}</Typography>
                             </Stack>
                             <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%'}}>
-                                <textarea placeholder="Dodaj opis" className="text" style={{background: 'transparent', 
-                                                                                            width: '100%', 
-                                                                                            height: '100%', 
-                                                                                            padding: '3px 16px', 
-                                                                                            boxSizing: 'border-box', 
-                                                                                            border:'none', 
-                                                                                            resize: 'none', 
-                                                                                            whiteSpace: 'wrap', 
-                                                                                            overflow: 'auto',
-                                                                                            color: 'rgb(250,250,250)',
-                                                                                            fontSize: '16px',
-                                                                                            fontFamily: 'Roboto'}}>
-                                </textarea>
+                                <textarea placeholder="Dodaj opis" className="text" onChange={(e) => setDescribe(e.target.value)} style={{background: 'transparent', 
+                                                                                                                                          width: '100%', 
+                                                                                                                                          height: '100%', 
+                                                                                                                                          padding: '3px 16px', 
+                                                                                                                                          boxSizing: 'border-box', 
+                                                                                                                                          border:'none', 
+                                                                                                                                          resize: 'none', 
+                                                                                                                                          whiteSpace: 'wrap', 
+                                                                                                                                          overflow: 'auto',
+                                                                                                                                          color: 'rgb(250,250,250)',
+                                                                                                                                          fontSize: '16px',
+                                                                                                                                          fontFamily: 'Roboto'}}>
+                                </textarea> 
                             </Box>
                         </Stack>
                     </Stack>
